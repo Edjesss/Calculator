@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mortgage & Vacation Rental ROI Calculator</title>
+    <title>Aruba Mortgage & Vacation Rental ROI Calculator</title>
     <style>
         * {
             margin: 0;
@@ -224,8 +224,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>🏠 Mortgage & Vacation Rental Calculator</h1>
-            <p class="subtitle">Analyze your investment property's ROI and cash flow</p>
+            <h1>🏝️ Aruba Property Investment Calculator</h1>
+            <p class="subtitle">Analyze your vacation rental investment ROI and cash flow in Aruba's market</p>
         </header>
 
         <div class="content">
@@ -233,81 +233,85 @@
                 <h2>Property Details</h2>
                 
                 <div class="form-group">
-                    <label for="propertyPrice">Property Purchase Price ($)</label>
-                    <input type="number" id="propertyPrice" value="300000" step="1000">
-                    <div class="input-hint">Total purchase price of the property</div>
+                    <label for="propertyPrice">Property Purchase Price (AWG)</label>
+                    <input type="number" id="propertyPrice" value="535000" step="1000">
+                    <div class="input-hint">Total purchase price in Aruban Florins</div>
                 </div>
 
                 <div class="form-group">
                     <label for="downPayment">Down Payment (%)</label>
-                    <input type="number" id="downPayment" value="20" step="1" min="0" max="100">
-                    <div class="input-hint">Percentage of purchase price</div>
+                    <input type="number" id="downPayment" value="25" step="1" min="0" max="100">
+                    <div class="input-hint">Typical requirement in Aruba: 20-30%</div>
                 </div>
 
                 <div class="form-group">
                     <label for="interestRate">Mortgage Interest Rate (%)</label>
-                    <input type="number" id="interestRate" value="6.5" step="0.1">
-                    <div class="input-hint">Annual interest rate</div>
+                    <input type="number" id="interestRate" value="5.5" step="0.1">
+                    <div class="input-hint">Current Aruba market rates: 5-7%</div>
                 </div>
 
                 <div class="form-group">
                     <label for="loanTerm">Loan Term (Years)</label>
-                    <input type="number" id="loanTerm" value="30" step="1">
-                    <div class="input-hint">Mortgage duration in years</div>
+                    <input type="number" id="loanTerm" value="25" step="1">
+                    <div class="input-hint">Common terms in Aruba: 20-30 years</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="closingCosts">Closing Costs ($)</label>
-                    <input type="number" id="closingCosts" value="9000" step="100">
-                    <div class="input-hint">Fees, inspections, and other upfront costs</div>
+                    <label for="closingCosts">Closing Costs (AWG)</label>
+                    <input type="number" id="closingCosts" value="26750" step="100">
+                    <div class="input-hint">Transfer tax (6%), legal fees, notary (~5-7% total)</div>
                 </div>
 
                 <h2 style="margin-top: 30px;">Rental Income</h2>
 
                 <div class="form-group">
-                    <label for="nightlyRate">Nightly Rental Rate ($)</label>
-                    <input type="number" id="nightlyRate" value="150" step="10">
-                    <div class="input-hint">Average price per night</div>
+                    <label for="nightlyRate">Nightly Rental Rate (AWG)</label>
+                    <input type="number" id="nightlyRate" value="450" step="10">
+                    <div class="input-hint">Aruba average: AWG 350-600/night</div>
                 </div>
 
                 <div class="form-group">
                     <label for="occupancyRate">Occupancy Rate (%)</label>
-                    <input type="number" id="occupancyRate" value="65" step="1" min="0" max="100">
-                    <div class="input-hint">Expected occupancy percentage</div>
+                    <input type="number" id="occupancyRate" value="70" step="1" min="0" max="100">
+                    <div class="input-hint">Aruba tourist season: 65-85% typical</div>
                 </div>
 
                 <h2 style="margin-top: 30px;">Operating Expenses</h2>
 
                 <div class="form-group">
-                    <label for="propertyTax">Annual Property Tax ($)</label>
-                    <input type="number" id="propertyTax" value="3000" step="100">
+                    <label for="propertyTax">Annual Property Tax (AWG)</label>
+                    <input type="number" id="propertyTax" value="5350" step="100">
+                    <div class="input-hint">Aruba: approx 1% of assessed value</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="insurance">Annual Insurance ($)</label>
-                    <input type="number" id="insurance" value="1200" step="100">
+                    <label for="insurance">Annual Insurance (AWG)</label>
+                    <input type="number" id="insurance" value="3500" step="100">
+                    <div class="input-hint">Hurricane coverage recommended</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="maintenance">Monthly Maintenance & Utilities ($)</label>
-                    <input type="number" id="maintenance" value="300" step="50">
+                    <label for="maintenance">Monthly Maintenance & Utilities (AWG)</label>
+                    <input type="number" id="maintenance" value="750" step="50">
+                    <div class="input-hint">Water, electricity, pool maintenance, A/C</div>
                 </div>
 
                 <div class="form-group">
                     <label for="managementFee">Property Management Fee (%)</label>
-                    <input type="number" id="managementFee" value="15" step="1" min="0" max="100">
-                    <div class="input-hint">Percentage of rental income</div>
+                    <input type="number" id="managementFee" value="20" step="1" min="0" max="100">
+                    <div class="input-hint">Aruba typical: 15-25% of rental income</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="cleaningFee">Cleaning Cost per Booking ($)</label>
-                    <input type="number" id="cleaningFee" value="75" step="5">
+                    <label for="cleaningFee">Cleaning Cost per Booking (AWG)</label>
+                    <input type="number" id="cleaningFee" value="180" step="5">
+                    <div class="input-hint">Professional cleaning between guests</div>
                 </div>
 
                 <div class="form-group">
                     <label for="avgBookingLength">Average Booking Length (Nights)</label>
-                    <input type="number" id="avgBookingLength" value="3" step="1" min="1">
-                    <div class="input-hint">Average nights per booking</div>
+                    <input type="number" id="avgBookingLength" value="5" step="1" min="1">
+                    <div class="input-hint">Aruba average: 4-7 nights per stay</div>
                 </div>
 
                 <button onclick="calculateROI()">Calculate ROI</button>
@@ -395,7 +399,7 @@
             }
 
             // Format currency
-            const fmt = (num) => '$' + num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            const fmt = (num) => 'AWG ' + num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
             const fmtPct = (num) => num.toFixed(2) + '%';
 
             // Display results
