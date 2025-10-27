@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calculator-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .input-section, .assumptions-section, .results-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .total-payment {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-left: none;
+            font-size: 1.2em;
+        }
+
+        .total-payment .result-label,
+        .total-payment .result-value {
+            color: white;
+        }
+
+        .info-text {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+
+        .ownership-toggle {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ownership-toggle label {
+            margin-bottom: 0;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .currency-info {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: #0c5460;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>💰 Mortgage Calculator</h1>
+        
+        <div class="input-section">
+            <h2>Loan Information</h2>
+            <div class="input-grid">
+                <div class="form-group">
+                    <label for="homePrice">Home Price ($)</label>
+                    <input type="number" id="homePrice" placeholder="350000" value="350000" min="0" step="1000">
+                </div>
+                <div class="form-group">
+                    <label for="downPayment">Down Payment ($)</label>
+                    <input type="number" id="downPayment" placeholder="70000" value="70000" min="0" step="1000">
+                </div>
+                <div class="form-group">
+                    <label for="interestRate">Annual Interest Rate (%)</label>
+                    <input type="number" id="interestRate" placeholder="6.5" value="6.5" min="0" max="100" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="loanTerm">Loan Term (years)</label>
+                    <input type="number" id="loanTerm" placeholder="30" value="30" min="1" max="50">
+                </div>
+            </div>
+        </div>
+
+        <div class="assumptions-section">
+            <h2>Fixed Assumptions</h2>
+            <div class="info-text">
+                These values are preset based on typical market conditions. Modify if needed.
+            </div>
+            <div class="input-grid">
+                <div class="form-group">
+                    <label for="propertyTaxRate">Property Tax Rate (% annually)</label>
+                    <input type="number" id="propertyTaxRate" placeholder="1.2" value="1.2" min="0" max="10" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="homeInsurance">Home Insurance ($ monthly)</label>
+                    <input type="number" id="homeInsurance" placeholder="150" value="150" min="0" step="10">
+                </div>
+                <div class="form-group">
+                    <label for="hoaFees">HOA Fees ($ monthly)</label>
+                    <input type="number" id="hoaFees" placeholder="50" value="50" min="0" step="10">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Property Ownership Status</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="ownerOccupied" name="ownership" value="owner" checked>
+                        <label for="ownerOccupied">Owner Occupied</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="investment" name="ownership" value="investment">
+                        <label for="investment">Investment Property</label>
+                    </div>
+                </div>
+            </div>
+            <div class="info-text">
+                <strong>Note:</strong> Owner-occupied properties typically receive property tax exemptions or lower rates, while investment properties are taxed at the full rate.
+            </div>
+        </div>
+
+        <button onclick="calculateMortgage()">Calculate Monthly Payment</button>
+
+        <div class="results-section" id="results" style="display: none;">
+            <h2>Monthly Payment Breakdown</h2>
+            <div id="resultsContent"></div>
+            <div class="currency-info" id="currencyConversion"></div>
+        </div>
+    </div>
+
+    <script>
+        // Currency conversion rates (as of reference date)
+        const EXCHANGE_RATES = {
+            USD_TO_EUR: 0.92,
+            USD_TO_MXN: 17.15,
+            USD_TO_CAD: 1.36
+        };
+
+        function calculateMortgage() {
+            // Get input values
+            const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
+            const downPayment = parseFloat(document.getElementById('downPayment').value) || 0;
+            const annualInterestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const loanTermYears = parseFloat(document.getElementById('loanTerm').value) || 0;
+            const propertyTaxRate = parseFloat(document.getElementById('propertyTaxRate').value) || 0;
+            const homeInsurance = parseFloat(document.getElementById('homeInsurance').value) || 0;
+            const hoaFees = parseFloat(document.getElementById('hoaFees').value) || 0;
+            const isOwnerOccupied = document.getElementById('ownerOccupied').checked;
+
+            // Validate inputs
+            if (homePrice <= 0 || loanTermYears <= 0) {
+                alert('Please enter valid values for Home Price and Loan Term');
+                return;
+            }
+
+            if (downPayment >= homePrice) {
+                alert('Down payment must be less than home price');
+                return;
+            }
+
+            // Calculate loan amount
+            const loanAmount = homePrice - downPayment;
+
+            // Calculate monthly mortgage payment (Principal & Interest)
+            const monthlyInterestRate = (annualInterestRate / 100) / 12;
+            const numberOfPayments = loanTermYears * 12;
+
+            let principalAndInterest = 0;
+            if (monthlyInterestRate > 0) {
+                principalAndInterest = loanAmount * 
+                    (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+                    (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+            } else {
+                principalAndInterest = loanAmount / numberOfPayments;
+            }
+
+            // Calculate property tax (monthly)
+            // Apply tax exemption/discount for owner-occupied properties (typically 20-30% reduction)
+            const taxMultiplier = isOwnerOccupied ? 0.75 : 1.0;
+            const annualPropertyTax = (homePrice * (propertyTaxRate / 100)) * taxMultiplier;
+            const monthlyPropertyTax = annualPropertyTax / 12;
+
+            // Calculate total monthly payment
+            const totalMonthlyPayment = principalAndInterest + monthlyPropertyTax + homeInsurance + hoaFees;
+
+            // Calculate total loan cost
+            const totalPaid = totalMonthlyPayment * numberOfPayments;
+            const totalInterest = (principalAndInterest * numberOfPayments) - loanAmount;
+
+            // Display results
+            displayResults({
+                principalAndInterest,
+                monthlyPropertyTax,
+                homeInsurance,
+                hoaFees,
+                totalMonthlyPayment,
+                loanAmount,
+                downPaymentPercent: (downPayment / homePrice) * 100,
+                totalInterest,
+                totalPaid,
+                isOwnerOccupied
+            });
+
+            // Show results section
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function displayResults(data) {
+            const resultsContent = document.getElementById('resultsContent');
+            
+            const ownershipStatus = data.isOwnerOccupied ? 
+                '<strong>Owner Occupied</strong> (Tax benefit applied)' : 
+                '<strong>Investment Property</strong> (Full tax rate)';
+
+            resultsContent.innerHTML = `
+                <div class="result-item total-payment">
+                    <span class="result-label">Total Monthly Payment</span>
+                    <span class="result-value">${formatCurrency(data.totalMonthlyPayment)}</span>
+                </div>
+                <div class="info-text">
+                    Property Type: ${ownershipStatus}
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Principal & Interest</span>
+                    <span class="result-value">${formatCurrency(data.principalAndInterest)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Property Tax</span>
+                    <span class="result-value">${formatCurrency(data.monthlyPropertyTax)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Home Insurance</span>
+                    <span class="result-value">${formatCurrency(data.homeInsurance)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">HOA Fees</span>
+                    <span class="result-value">${formatCurrency(data.hoaFees)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Loan Amount</span>
+                    <span class="result-value">${formatCurrency(data.loanAmount)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Down Payment</span>
+                    <span class="result-value">${data.downPaymentPercent.toFixed(1)}%</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Interest Paid</span>
+                    <span class="result-value">${formatCurrency(data.totalInterest)}</span>
+                </div>
+            `;
+
+            // Display currency conversions
+            displayCurrencyConversions(data.totalMonthlyPayment);
+        }
+
+        function displayCurrencyConversions(usdAmount) {
+            const eurAmount = usdAmount * EXCHANGE_RATES.USD_TO_EUR;
+            const mxnAmount = usdAmount * EXCHANGE_RATES.USD_TO_MXN;
+            const cadAmount = usdAmount * EXCHANGE_RATES.USD_TO_CAD;
+
+            const currencyDiv = document.getElementById('currencyConversion');
+            currencyDiv.innerHTML = `
+                <strong>Currency Conversions (Monthly Payment):</strong><br>
+                EUR (Euro): €${eurAmount.toFixed(2)}<br>
+                MXN (Mexican Peso): $${mxnAmount.toFixed(2)}<br>
+                CAD (Canadian Dollar): $${cadAmount.toFixed(2)}<br>
+                <small><em>Note: Exchange rates are approximate and may vary.</em></small>
+            `;
+        }
+
+        // Auto-calculate on page load
+        window.addEventListener('load', function() {
+            calculateMortgage();
+        });
+    </script>
+</body>
+</html>
