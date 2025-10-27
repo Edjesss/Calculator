@@ -256,6 +256,12 @@
                     <div class="input-hint">Mortgage duration in years</div>
                 </div>
 
+                <div class="form-group">
+                    <label for="closingCosts">Closing Costs ($)</label>
+                    <input type="number" id="closingCosts" value="9000" step="100">
+                    <div class="input-hint">Fees, inspections, and other upfront costs</div>
+                </div>
+
                 <h2 style="margin-top: 30px;">Rental Income</h2>
 
                 <div class="form-group">
@@ -298,6 +304,12 @@
                     <input type="number" id="cleaningFee" value="75" step="5">
                 </div>
 
+                <div class="form-group">
+                    <label for="avgBookingLength">Average Booking Length (Nights)</label>
+                    <input type="number" id="avgBookingLength" value="3" step="1" min="1">
+                    <div class="input-hint">Average nights per booking</div>
+                </div>
+
                 <button onclick="calculateROI()">Calculate ROI</button>
             </div>
 
@@ -320,6 +332,7 @@
             const downPaymentPercent = parseFloat(document.getElementById('downPayment').value) || 0;
             const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
             const loanTerm = parseFloat(document.getElementById('loanTerm').value) || 0;
+            const closingCosts = parseFloat(document.getElementById('closingCosts').value) || 0;
             const nightlyRate = parseFloat(document.getElementById('nightlyRate').value) || 0;
             const occupancyRate = parseFloat(document.getElementById('occupancyRate').value) || 0;
             const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
@@ -327,6 +340,7 @@
             const maintenance = parseFloat(document.getElementById('maintenance').value) || 0;
             const managementFeePercent = parseFloat(document.getElementById('managementFee').value) || 0;
             const cleaningFee = parseFloat(document.getElementById('cleaningFee').value) || 0;
+            const avgBookingLength = parseFloat(document.getElementById('avgBookingLength').value) || 1;
 
             // Calculate mortgage details
             const downPaymentAmount = propertyPrice * (downPaymentPercent / 100);
@@ -344,7 +358,7 @@
 
             // Calculate rental income
             const nightsPerYear = 365 * (occupancyRate / 100);
-            const bookingsPerYear = nightsPerYear; // Assuming 1 night average per booking for cleaning fee calculation
+            const bookingsPerYear = nightsPerYear / avgBookingLength; // Calculate bookings based on average stay length
             const annualGrossRental = nightlyRate * nightsPerYear;
             const monthlyGrossRental = annualGrossRental / 12;
 
@@ -355,17 +369,16 @@
             
             const totalAnnualExpenses = propertyTax + insurance + annualMaintenance + 
                                        annualManagementFee + annualCleaningCosts + (monthlyMortgage * 12);
-            const monthlyExpenses = totalAnnualExpenses / 12;
 
             // Calculate cash flow
             const annualNetIncome = annualGrossRental - totalAnnualExpenses;
             const monthlyNetIncome = annualNetIncome / 12;
 
-            // Calculate ROI
-            const totalInvestment = downPaymentAmount;
+            // Calculate ROI - includes down payment and closing costs
+            const totalInvestment = downPaymentAmount + closingCosts;
             const annualROI = (annualNetIncome / totalInvestment) * 100;
 
-            // Calculate cap rate (annual net income / property price)
+            // Calculate cap rate - net operating income divided by property price (excludes mortgage)
             const annualNetOperatingIncome = annualGrossRental - (propertyTax + insurance + 
                                             annualMaintenance + annualManagementFee + annualCleaningCosts);
             const capRate = (annualNetOperatingIncome / propertyPrice) * 100;
