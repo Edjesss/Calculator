@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage & Vacation Rental ROI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        .results-section {
+            padding: 25px;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-hint {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .metric-value.positive {
+            color: #28a745;
+        }
+
+        .metric-value.negative {
+            color: #dc3545;
+        }
+
+        .summary-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .summary-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-section {
+            margin-top: 20px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .roi-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .roi-excellent {
+            background: #28a745;
+            color: white;
+        }
+
+        .roi-good {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .roi-poor {
+            background: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏠 Mortgage & Vacation Rental Calculator</h1>
+            <p class="subtitle">Analyze your investment property's ROI and cash flow</p>
+        </header>
+
+        <div class="content">
+            <div class="input-section">
+                <h2>Property Details</h2>
+                
+                <div class="form-group">
+                    <label for="propertyPrice">Property Purchase Price ($)</label>
+                    <input type="number" id="propertyPrice" value="300000" step="1000">
+                    <div class="input-hint">Total purchase price of the property</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="downPayment">Down Payment (%)</label>
+                    <input type="number" id="downPayment" value="20" step="1" min="0" max="100">
+                    <div class="input-hint">Percentage of purchase price</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="interestRate">Mortgage Interest Rate (%)</label>
+                    <input type="number" id="interestRate" value="6.5" step="0.1">
+                    <div class="input-hint">Annual interest rate</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loanTerm">Loan Term (Years)</label>
+                    <input type="number" id="loanTerm" value="30" step="1">
+                    <div class="input-hint">Mortgage duration in years</div>
+                </div>
+
+                <h2 style="margin-top: 30px;">Rental Income</h2>
+
+                <div class="form-group">
+                    <label for="nightlyRate">Nightly Rental Rate ($)</label>
+                    <input type="number" id="nightlyRate" value="150" step="10">
+                    <div class="input-hint">Average price per night</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="occupancyRate">Occupancy Rate (%)</label>
+                    <input type="number" id="occupancyRate" value="65" step="1" min="0" max="100">
+                    <div class="input-hint">Expected occupancy percentage</div>
+                </div>
+
+                <h2 style="margin-top: 30px;">Operating Expenses</h2>
+
+                <div class="form-group">
+                    <label for="propertyTax">Annual Property Tax ($)</label>
+                    <input type="number" id="propertyTax" value="3000" step="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="insurance">Annual Insurance ($)</label>
+                    <input type="number" id="insurance" value="1200" step="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="maintenance">Monthly Maintenance & Utilities ($)</label>
+                    <input type="number" id="maintenance" value="300" step="50">
+                </div>
+
+                <div class="form-group">
+                    <label for="managementFee">Property Management Fee (%)</label>
+                    <input type="number" id="managementFee" value="15" step="1" min="0" max="100">
+                    <div class="input-hint">Percentage of rental income</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cleaningFee">Cleaning Cost per Booking ($)</label>
+                    <input type="number" id="cleaningFee" value="75" step="5">
+                </div>
+
+                <button onclick="calculateROI()">Calculate ROI</button>
+            </div>
+
+            <div class="results-section">
+                <h2>Investment Analysis</h2>
+                
+                <div id="results">
+                    <p style="text-align: center; color: #999; padding: 40px 0;">
+                        Enter your property details and click "Calculate ROI" to see your investment analysis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateROI() {
+            // Get input values
+            const propertyPrice = parseFloat(document.getElementById('propertyPrice').value) || 0;
+            const downPaymentPercent = parseFloat(document.getElementById('downPayment').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const loanTerm = parseFloat(document.getElementById('loanTerm').value) || 0;
+            const nightlyRate = parseFloat(document.getElementById('nightlyRate').value) || 0;
+            const occupancyRate = parseFloat(document.getElementById('occupancyRate').value) || 0;
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            const maintenance = parseFloat(document.getElementById('maintenance').value) || 0;
+            const managementFeePercent = parseFloat(document.getElementById('managementFee').value) || 0;
+            const cleaningFee = parseFloat(document.getElementById('cleaningFee').value) || 0;
+
+            // Calculate mortgage details
+            const downPaymentAmount = propertyPrice * (downPaymentPercent / 100);
+            const loanAmount = propertyPrice - downPaymentAmount;
+            const monthlyInterestRate = (interestRate / 100) / 12;
+            const numberOfPayments = loanTerm * 12;
+            
+            // Monthly mortgage payment formula: P * [r(1+r)^n] / [(1+r)^n - 1]
+            let monthlyMortgage = 0;
+            if (monthlyInterestRate > 0 && numberOfPayments > 0) {
+                monthlyMortgage = loanAmount * 
+                    (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+                    (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+            }
+
+            // Calculate rental income
+            const nightsPerYear = 365 * (occupancyRate / 100);
+            const bookingsPerYear = nightsPerYear; // Assuming 1 night average per booking for cleaning fee calculation
+            const annualGrossRental = nightlyRate * nightsPerYear;
+            const monthlyGrossRental = annualGrossRental / 12;
+
+            // Calculate expenses
+            const annualManagementFee = annualGrossRental * (managementFeePercent / 100);
+            const annualCleaningCosts = cleaningFee * bookingsPerYear;
+            const annualMaintenance = maintenance * 12;
+            
+            const totalAnnualExpenses = propertyTax + insurance + annualMaintenance + 
+                                       annualManagementFee + annualCleaningCosts + (monthlyMortgage * 12);
+            const monthlyExpenses = totalAnnualExpenses / 12;
+
+            // Calculate cash flow
+            const annualNetIncome = annualGrossRental - totalAnnualExpenses;
+            const monthlyNetIncome = annualNetIncome / 12;
+
+            // Calculate ROI
+            const totalInvestment = downPaymentAmount;
+            const annualROI = (annualNetIncome / totalInvestment) * 100;
+
+            // Calculate cap rate (annual net income / property price)
+            const annualNetOperatingIncome = annualGrossRental - (propertyTax + insurance + 
+                                            annualMaintenance + annualManagementFee + annualCleaningCosts);
+            const capRate = (annualNetOperatingIncome / propertyPrice) * 100;
+
+            // Determine ROI quality
+            let roiClass = 'roi-poor';
+            let roiLabel = 'Poor';
+            if (annualROI >= 15) {
+                roiClass = 'roi-excellent';
+                roiLabel = 'Excellent';
+            } else if (annualROI >= 8) {
+                roiClass = 'roi-good';
+                roiLabel = 'Good';
+            }
+
+            // Format currency
+            const fmt = (num) => '$' + num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            const fmtPct = (num) => num.toFixed(2) + '%';
+
+            // Display results
+            const resultsHTML = `
+                <div class="metric-card">
+                    <div class="metric-label">Monthly Mortgage Payment</div>
+                    <div class="metric-value">${fmt(monthlyMortgage)}</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Monthly Rental Income (Gross)</div>
+                    <div class="metric-value positive">${fmt(monthlyGrossRental)}</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Monthly Cash Flow (Net)</div>
+                    <div class="metric-value ${monthlyNetIncome >= 0 ? 'positive' : 'negative'}">
+                        ${fmt(monthlyNetIncome)}
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Annual ROI</div>
+                    <div class="metric-value ${annualROI >= 0 ? 'positive' : 'negative'}">
+                        ${fmtPct(annualROI)}
+                        <span class="roi-indicator ${roiClass}">${roiLabel}</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Cap Rate</div>
+                    <div class="metric-value">${fmtPct(capRate)}</div>
+                </div>
+
+                <div class="summary-section">
+                    <h3>📊 Annual Summary</h3>
+                    <div class="summary-item">
+                        <span>Gross Rental Income</span>
+                        <strong>${fmt(annualGrossRental)}</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Expenses</span>
+                        <strong>${fmt(totalAnnualExpenses)}</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Net Annual Income</span>
+                        <strong>${fmt(annualNetIncome)}</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Total Investment</span>
+                        <strong>${fmt(totalInvestment)}</strong>
+                    </div>
+                </div>
+
+                <div class="breakdown-section">
+                    <h3 style="margin-bottom: 15px; color: #667eea;">💰 Expense Breakdown (Annual)</h3>
+                    <div class="breakdown-item">
+                        <span>Mortgage Payments</span>
+                        <strong>${fmt(monthlyMortgage * 12)}</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Property Tax</span>
+                        <strong>${fmt(propertyTax)}</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Insurance</span>
+                        <strong>${fmt(insurance)}</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Maintenance & Utilities</span>
+                        <strong>${fmt(annualMaintenance)}</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Property Management</span>
+                        <strong>${fmt(annualManagementFee)}</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Cleaning Costs</span>
+                        <strong>${fmt(annualCleaningCosts)}</strong>
+                    </div>
+                    <div class="breakdown-item" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 15px;">
+                        <strong>Total Annual Expenses</strong>
+                        <strong>${fmt(totalAnnualExpenses)}</strong>
+                    </div>
+                </div>
+
+                <div class="breakdown-section">
+                    <h3 style="margin-bottom: 15px; color: #667eea;">📈 Revenue Details</h3>
+                    <div class="breakdown-item">
+                        <span>Occupied Nights per Year</span>
+                        <strong>${Math.round(nightsPerYear)} nights</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Average Nightly Rate</span>
+                        <strong>${fmt(nightlyRate)}</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Occupancy Rate</span>
+                        <strong>${occupancyRate}%</strong>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('results').innerHTML = resultsHTML;
+        }
+
+        // Calculate on page load with default values
+        window.addEventListener('load', function() {
+            calculateROI();
+        });
+    </script>
+</body>
+</html>
